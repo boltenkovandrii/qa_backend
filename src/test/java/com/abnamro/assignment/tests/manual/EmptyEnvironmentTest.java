@@ -13,7 +13,6 @@ import java.util.List;
 
 import static com.abnamro.assignment.base.IssuesAPI.*;
 import static com.abnamro.assignment.helpers.AssertionHelpers.assertError;
-import static com.abnamro.assignment.helpers.ERROR_MESSAGES.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Tag("EmptyEnvironmentTests")
@@ -40,14 +39,14 @@ public class EmptyEnvironmentTest extends BaseTest {
     @DisplayName("Attempt to retrieve issue for an empty environment")
     public void getIssueEmptyEnvTest() {
         Response response = getIssueRaw(PROJECT_ID, 1);
-        assertError(response, 404, NOT_FOUND);
+        assertError(response, 404, NOT_FOUND_MESSAGE);
     }
 
     @Test
     @DisplayName("Attempt to delete issue for an empty environment")
     public void deleteIssueEmptyEnvTest() {
         Response response = deleteIssueRaw(PROJECT_ID, 1);
-        assertError(response, 404, "404 Issue Not Found");
+        assertError(response, 404, ISSUE_NOT_FOUND_MESSAGE);
     }
 
     @Test
@@ -57,7 +56,7 @@ public class EmptyEnvironmentTest extends BaseTest {
                 null, null, null, null, null, null, null, "close",null);
 
         Response response = updateIssueRaw(PROJECT_ID, 1, updateRequest);
-        assertError(response, 404, NOT_FOUND);
+        assertError(response, 404, NOT_FOUND_MESSAGE);
     }
 
 
