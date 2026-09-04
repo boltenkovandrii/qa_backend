@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 // Not part of the assignment's final test suite - a lightweight sanity check that the
 // new API wrappers work end-to-end against the real GitLab instance.
 @Tag("UnitTest")
-public class IssuesApiSelfCheckTest {
+public class IssuesApiSelfCheckTest extends BaseTest {
 
     @Test
     @DisplayName("Self-check: create, update and delete an issue lifecycle")

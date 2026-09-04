@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("UnitTest")
-public class SampleUnitTest {
+public class SampleUnitTest extends BaseTest {
 
     //Note: This is just a sample - not part of the assignment
 

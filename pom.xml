@@ -29,6 +29,7 @@
         <rest-assured.version>6.0.1</rest-assured.version>
         <jackson-databind.version>3.2.2</jackson-databind.version>
         <assertj.version>4.0.0-M1</assertj.version>
+        <scope>UnitTest</scope>
     </properties>
 
     <dependencies>
@@ -126,7 +127,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
-                    <groups>UnitTest</groups>
+                    <groups>${scope}</groups>
                     <excludedGroups>WIP</excludedGroups>
                 </configuration>
             </plugin>
