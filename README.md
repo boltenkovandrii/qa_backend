@@ -15,6 +15,16 @@ Keep this file updated with any special instructions or dependencies so reviewer
 
 
 -------------------------------------------------------------------------------------------------------------
+## Limitations and scope:
+1. Following API's are covered:
+   - https://docs.gitlab.com/api/issues/#list-all-project-issues
+   - https://docs.gitlab.com/api/issues/#retrieve-a-project-issue
+   - https://docs.gitlab.com/api/issues/#create-an-issue
+   - https://docs.gitlab.com/api/issues/#update-an-issue
+   - https://docs.gitlab.com/api/issues/#delete-an-issue
+2. Only Free plan is covered - no Premium or Ultimate logic or related fields in DTO's are covered
+
+
 
 ## Test Execution Tags
 

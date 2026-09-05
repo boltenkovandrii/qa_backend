@@ -7,8 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static com.abnamro.assignment.base.IssuesAPI.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,29 +20,22 @@ public class IssuesApiSelfCheckTest extends BaseTest {
     @DisplayName("Self-check: create, update and delete an issue lifecycle")
     void createUpdateDeleteIssueLifecycle() {
         // Create
-        IssueCreateRequest createRequest = new IssueCreateRequest(
-                "Self-check issue " + System.currentTimeMillis(),
-                "Created by IssuesApiSelfCheckTest",
-                List.of("self-check"),
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+        IssueCreateRequest createRequest = new IssueCreateRequest("Self-check issue " + System.currentTimeMillis())
+                .setDescription("Created by IssuesApiSelfCheckTest")
+                .setLabels("self-check");
+
+
         Issue created = createIssue(createRequest);
         assertThat(created).as("Created issue should not be null").isNotNull();
-        assertThat(created.title()).isEqualTo(createRequest.title());
+        assertThat(created.title()).isEqualTo(createRequest.getTitle());
 
         // Update
-        IssueUpdateRequest updateRequest = new IssueUpdateRequest(
-                "Self-check issue updated " + System.currentTimeMillis(),
-                null, null, null, null, null, null, null,
-                "close",
-                null
-        );
+        IssueUpdateRequest updateRequest = new IssueUpdateRequest()
+                .setTitle("Self-check issue updated " + System.currentTimeMillis())
+                .setStateEvent("close");
+
         Issue updated = updateIssue(created.iid(), updateRequest);
-        assertThat(updated.title()).isEqualTo(updateRequest.title());
+        assertThat(updated.title()).isEqualTo(updateRequest.getTitle());
         assertThat(updated.state()).isEqualTo("closed");
 
         // Delete

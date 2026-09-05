@@ -52,8 +52,10 @@ public class EmptyEnvironmentTest extends BaseTest {
     @Test
     @DisplayName("Attempt to update issue for an empty environment")
     public void updateIssueEmptyEnvTest() {
-        IssueUpdateRequest updateRequest = new IssueUpdateRequest(generateUniqueIssueTitle("Update for empty env test"),
-                null, null, null, null, null, null, null, "close",null);
+
+        IssueUpdateRequest updateRequest = new IssueUpdateRequest()
+                .setTitle(generateUniqueIssueTitle("Update for empty env test"))
+                .setStateEvent("close");
 
         Response response = updateIssueRaw(PROJECT_ID, 1, updateRequest);
         assertError(response, 404, NOT_FOUND_MESSAGE);
@@ -63,21 +65,14 @@ public class EmptyEnvironmentTest extends BaseTest {
     @Test
     @DisplayName("Create issue for an empty environment")
     public void createIssueEmptyEnvTest() {
-        IssueCreateRequest createRequest = new IssueCreateRequest(
-                generateUniqueIssueTitle("Create for empty env test"),
-                "Create for empty env test",
-                List.of("self-check"),
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+        IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Create for empty env test"))
+                .setDescription("Create for empty env test")
+                .setLabels("self-check");
         Issue created = createIssue(createRequest);
 
         try {
             assertThat(created).as("Created issue should not be null").isNotNull();
-            assertThat(created.title()).isEqualTo(createRequest.title());
+            assertThat(created.title()).isEqualTo(createRequest.getTitle());
         } finally {
             // Clean up
             if(created!=null){
