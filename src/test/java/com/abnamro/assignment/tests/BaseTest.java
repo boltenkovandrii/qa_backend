@@ -3,6 +3,7 @@ package com.abnamro.assignment.tests;
 import com.abnamro.assignment.base.TestConfig;
 import com.abnamro.assignment.model.Issue;
 import com.abnamro.assignment.model.IssueCreateRequest;
+import io.restassured.response.Response;
 import org.apache.commons.configuration2.CompositeConfiguration;
 
 import java.time.LocalDate;
@@ -63,7 +64,19 @@ public class BaseTest {
         assertThat(issue.updatedAt()).isNotNull();
     }
 
+    protected static void assertStatus(Response response, int expectedStatusCode) {
+        assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
+    }
 
+    protected static void assertMessage(Response response, int expectedStatusCode, String expectedMessage) {
+        assertStatus(response, expectedStatusCode);
+        assertThat(response.jsonPath().getString("message")).contains(expectedMessage);
+    }
+
+    protected static void assertError(Response response, int expectedStatusCode, String expectedMessage) {
+        assertStatus(response, expectedStatusCode);
+        assertThat(response.jsonPath().getString("error")).contains(expectedMessage);
+    }
 
 
 }

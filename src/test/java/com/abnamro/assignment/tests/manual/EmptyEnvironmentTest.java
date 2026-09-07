@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.abnamro.assignment.base.IssuesAPI.*;
-import static com.abnamro.assignment.helpers.AssertionHelpers.assertMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Tag("EmptyEnvironmentTests")
