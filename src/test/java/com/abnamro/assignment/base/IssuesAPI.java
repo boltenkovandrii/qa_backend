@@ -47,6 +47,10 @@ public class IssuesAPI {
         return restBase.getInternal(projectIssuesUrl(projectId));
     }
 
+    public static Response getIssuesRaw(String projectId) {
+        return restBase.getInternal(projectIssuesUrl(projectId));
+    }
+
 
 
     ////////////// Retrieve a project issue ////////////////
@@ -62,6 +66,10 @@ public class IssuesAPI {
     }
 
     public static Response getIssueRaw(long projectId, long issueIid) {
+        return restBase.getInternal(projectIssuesUrl(projectId) + "/" + issueIid);
+    }
+
+    public static Response getIssueRaw(String projectId, long issueIid) {
         return restBase.getInternal(projectIssuesUrl(projectId) + "/" + issueIid);
     }
 
@@ -82,6 +90,10 @@ public class IssuesAPI {
         return restBase.postInternal(request, projectIssuesUrl(projectId));
     }
 
+    public static Response createIssueRaw(String projectId, IssueCreateRequest request) {
+        return restBase.postInternal(request, projectIssuesUrl(projectId));
+    }
+
 
     ////////////// Edit an existing issue ////////////////
 
@@ -96,6 +108,10 @@ public class IssuesAPI {
     }
 
     public static Response updateIssueRaw(long projectId, long issueIid, IssueUpdateRequest request) {
+        return restBase.putInternal(request, projectIssuesUrl(projectId) + "/" + issueIid);
+    }
+
+    public static Response updateIssueRaw(String projectId, long issueIid, IssueUpdateRequest request) {
         return restBase.putInternal(request, projectIssuesUrl(projectId) + "/" + issueIid);
     }
 
@@ -115,10 +131,22 @@ public class IssuesAPI {
         return restBase.deleteInternal(projectIssuesUrl(projectId) + "/" + issueIid);
     }
 
+    public static Response deleteIssueRaw(String projectId, long issueIid) {
+        return restBase.deleteInternal(projectIssuesUrl(projectId) + "/" + issueIid);
+    }
+
 
     ////////////// Utilities ////////////////
 
-    private static String projectIssuesUrl(long projectId) {
+    public static String projectIssuesUrl(long projectId) {
         return PROJECT_ISSUES_URL + projectId + "/issues";
+    }
+
+    private static String projectIssuesUrl(String projectId) {
+        return PROJECT_ISSUES_URL + projectId + "/issues";
+    }
+
+    public static RestBase getRestBase() {
+        return restBase;
     }
 }

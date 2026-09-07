@@ -14,7 +14,7 @@ public class CleanupTest extends BaseTest {
 
 
     // This test is intended to be run manually to reset the project state by deleting all issues created (and not cleaned) by tests.
-    // NOTE: This test will only delete issues that start with the prefix defined in the TEST_ISSUE_PREFIX constant. Most issues created by tests should have this prefix, it is not 100% guaranteed.
+    // NOTE: This test will only delete issues that start with the prefix defined in the TEST_ISSUE_PREFIX constant. Most issues created by tests have this prefix, but not all of them.
     // DANGEROUS: For environments with useful data, make sure that no other issues start with the same prefix, otherwise they will be deleted as well.
 
     @Test

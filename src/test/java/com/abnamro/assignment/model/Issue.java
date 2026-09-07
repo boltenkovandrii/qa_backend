@@ -11,7 +11,7 @@ public record Issue(
         GitLabUser author,
         String description,
         String state,
-        Integer iid,
+        Long iid,
         Integer project_id,
         List<GitLabUser> assignees,
         GitLabUser assignee,
