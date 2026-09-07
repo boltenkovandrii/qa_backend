@@ -47,7 +47,11 @@ public class BaseTest {
         assertThat(issue.title()).isEqualTo(request.getTitle());
         assertThat(issue.assignee().id()).isEqualTo(request.getAssigneeId());
         assertThat(issue.confidential()).isEqualTo(request.getConfidential());
-        assertThat(issue.createdAt()).isEqualTo(request.getCreatedAt());
+        if (request.getCreatedAt() != null) {
+            assertThat(issue.createdAt()).isEqualTo(java.time.Instant.parse(request.getCreatedAt()));
+        }else {
+            assertThat(issue.createdAt()).isNull();
+        }
         assertThat(issue.description()).isEqualTo(request.getDescription());
         assertThat(issue.dueDate()).isEqualTo(LocalDate.parse(request.getDueDate()));
         assertThat(issue.issueType()).isEqualTo(request.getIssueType());
@@ -58,7 +62,7 @@ public class BaseTest {
     protected void verifyBasicResponseFields(Issue issue, String status){
         //Not all generated fields are verified here - just basic ones to ensure that the issue is created correctly.
         assertThat(issue.id()).isPositive();
-        assertThat(issue.project_id()).isEqualTo(PROJECT_ID); //only used for this project
+        assertThat(issue.project_id()).isEqualTo(Math.toIntExact(PROJECT_ID)); //only used for this project
         assertThat(issue.state()).isEqualTo(status);
         assertThat(issue.webUrl()).isNotBlank();
         assertThat(issue.updatedAt()).isNotNull();

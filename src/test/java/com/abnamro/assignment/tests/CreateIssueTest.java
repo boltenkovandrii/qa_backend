@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -140,7 +142,7 @@ public class CreateIssueTest extends BaseTest {
 
         // Verify that issue creation succeeds and the createdAt field is set to the future date.
         assertThat(created).as("Created issue should not be null").isNotNull();
-        assertThat(created.createdAt()).isEqualTo(createRequest.getCreatedAt());
+        assertThat(created.createdAt()).isEqualTo(Instant.parse(createRequest.getCreatedAt()));
 
         //cleanup
         deleteIssue(created.iid());
@@ -349,7 +351,7 @@ public class CreateIssueTest extends BaseTest {
 
         // Check that issue creation succeeds and the start date is set correctly.
         assertThat(created).as("Created issue should not be null").isNotNull();
-        assertThat(created.startDate()).isEqualTo("2000-01-01");
+        assertThat(created.startDate()).isEqualTo(LocalDate.parse(createRequest.getStartDate()));
 
         // Clean up
         deleteIssue(created.iid());
