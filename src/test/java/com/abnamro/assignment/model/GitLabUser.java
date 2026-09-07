@@ -3,16 +3,18 @@ package com.abnamro.assignment.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record GitLabUser(
+        Long id,
+        String username,
+        String name,
+        @JsonProperty("public_email")
+        String publicEmail,
         String state,
-
-        @JsonProperty("web_url")
-        String webUrl,
+        Boolean locked,
 
         @JsonProperty("avatar_url")
         String avatarUrl,
 
-        String username,
-        long id,
-        String name
-) {
+        @JsonProperty("web_url")
+                String webUrl
+        ) {
 }

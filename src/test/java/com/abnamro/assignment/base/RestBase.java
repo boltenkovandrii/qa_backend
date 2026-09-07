@@ -63,11 +63,11 @@ public class RestBase {
         throw new IllegalStateException("Unexpected end of retry loop");
     }
 
-    Response postInternal(Object JSON, String URI) {
+    public Response postInternal(Object JSON, String URI) {
         return authenticatedRequest().body(JSON).when().post(URI);
     }
 
-    Response putInternal(Object JSON, String URI) {
+    public Response putInternal(Object JSON, String URI) {
         return authenticatedRequest().body(JSON).when().put(URI);
     }
 

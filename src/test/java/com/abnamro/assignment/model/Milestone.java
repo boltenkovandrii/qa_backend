@@ -10,12 +10,12 @@ public record Milestone(
         LocalDate dueDate,
 
         @JsonProperty("project_id")
-        long projectId,
+        Long projectId,
 
         String state,
         String description,
         int iid,
-        long id,
+        Long id,
         String title,
 
         @JsonProperty("created_at")

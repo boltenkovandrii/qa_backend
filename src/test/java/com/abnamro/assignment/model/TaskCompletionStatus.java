@@ -3,9 +3,9 @@ package com.abnamro.assignment.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record TaskCompletionStatus(
-        int count,
+        Integer count,
 
         @JsonProperty("completed_count")
-        int completedCount
+        Integer completedCount
 ) {
 }

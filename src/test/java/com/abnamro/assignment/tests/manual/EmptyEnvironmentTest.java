@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.abnamro.assignment.base.IssuesAPI.*;
-import static com.abnamro.assignment.helpers.AssertionHelpers.assertError;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Tag("EmptyEnvironmentTests")
@@ -28,7 +27,7 @@ public class EmptyEnvironmentTest extends BaseTest {
 
 
     @Test
-    @DisplayName("Retrieve issue list for an empty environment")
+    @DisplayName("EmptyEnv1: Retrieve issue list for an empty environment")
     public void getIssuesEmptyEnvTest() {
         List<Issue> issues = getIssues();
         assertThat(issues).as("Check that issues  response is not null").isNotNull();
@@ -36,48 +35,44 @@ public class EmptyEnvironmentTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Attempt to retrieve issue for an empty environment")
+    @DisplayName("EmptyEnv2: Attempt to retrieve issue for an empty environment")
     public void getIssueEmptyEnvTest() {
         Response response = getIssueRaw(PROJECT_ID, 1);
-        assertError(response, 404, NOT_FOUND_MESSAGE);
+        assertMessage(response, 404, NOT_FOUND_MESSAGE);
     }
 
     @Test
-    @DisplayName("Attempt to delete issue for an empty environment")
+    @DisplayName("EmptyEnv3: Attempt to delete issue for an empty environment")
     public void deleteIssueEmptyEnvTest() {
         Response response = deleteIssueRaw(PROJECT_ID, 1);
-        assertError(response, 404, ISSUE_NOT_FOUND_MESSAGE);
+        assertMessage(response, 404, ISSUE_NOT_FOUND_MESSAGE);
     }
 
     @Test
-    @DisplayName("Attempt to update issue for an empty environment")
+    @DisplayName("EmptyEnv4: Attempt to update issue for an empty environment")
     public void updateIssueEmptyEnvTest() {
-        IssueUpdateRequest updateRequest = new IssueUpdateRequest(generateUniqueIssueTitle("Update for empty env test"),
-                null, null, null, null, null, null, null, "close",null);
+
+        IssueUpdateRequest updateRequest = new IssueUpdateRequest()
+                .setTitle(generateUniqueIssueTitle("Update for empty env test"))
+                .setStateEvent("close");
 
         Response response = updateIssueRaw(PROJECT_ID, 1, updateRequest);
-        assertError(response, 404, NOT_FOUND_MESSAGE);
+        assertMessage(response, 404, NOT_FOUND_MESSAGE);
     }
 
 
     @Test
-    @DisplayName("Create issue for an empty environment")
+    @DisplayName("EmptyEnv5: Create issue for an empty environment")
     public void createIssueEmptyEnvTest() {
-        IssueCreateRequest createRequest = new IssueCreateRequest(
-                generateUniqueIssueTitle("Create for empty env test"),
-                "Create for empty env test",
-                List.of("self-check"),
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+        IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Create for empty env test"))
+                .setDescription("Create for empty env test")
+                .setLabels("self-check");
         Issue created = createIssue(createRequest);
 
+        // it is important to clean up the created issue after the test, so it will not break 'empty environment' state, so we use a try-finally block
         try {
             assertThat(created).as("Created issue should not be null").isNotNull();
-            assertThat(created.title()).isEqualTo(createRequest.title());
+            assertThat(created.title()).isEqualTo(createRequest.getTitle());
         } finally {
             // Clean up
             if(created!=null){
