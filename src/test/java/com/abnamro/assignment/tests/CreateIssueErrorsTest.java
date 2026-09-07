@@ -21,13 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateIssueErrorsTest extends BaseTest {
 
     /*
-        Basic tests for issue creation logic with focus on error scenarios
+        Basic tests for issue creation logic with focus on error\negative scenarios
      */
 
 
     @Test
-    @DisplayName("CreateErrors1: Attempt to create an issue with both milestione and milestoneId set")
-    public void createIssueWithBothMilestoneAndMilestoneIdTest() {
+    @DisplayName("CreateErrors1: Attempt to create an issue with both milestone and milestoneId set")
+    void createIssueWithBothMilestoneAndMilestoneIdTest() {
         // prepare and send request
         IssueCreateRequest createRequest = new IssueCreateRequest(
                 generateUniqueIssueTitle("Test title"))
@@ -45,7 +45,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
     @Test
     @DisplayName("CreateErrors2: Attempt to create an issue with existing iid (test requires Admin rights)")
-    public void createIssueWithExistingIidTest() {
+    void createIssueWithExistingIidTest() {
         // Create an issue
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Test title"));
         Issue created = createIssue(createRequest); // create an issue to get an existing iid
@@ -69,7 +69,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
     @Test
     @DisplayName("CreateErrors3: Attempt to create an issue with no title")
-    public void createIssueWithNoTitleTest() {
+    void createIssueWithNoTitleTest() {
         // prepare and send request
         IssueCreateRequest createRequest = new IssueCreateRequest(null);
         Response response = createIssueRaw(PROJECT_ID, createRequest);
@@ -84,7 +84,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
     @Test
     @DisplayName("CreateErrors4: Attempt to create an issue with no title, but with some other fields set")
-    public void createIssueWithNoTitleButOtherFieldsSetTest() {
+    void createIssueWithNoTitleButOtherFieldsSetTest() {
         // prepare and send request
         IssueCreateRequest createRequest = new IssueCreateRequest(null)
                 .setDescription("Test description")
@@ -100,8 +100,8 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @Test
-    @DisplayName("CreateErrors4: Attempt to create an issue with no title, but with iid (requires Admin rights)")
-    public void createIssueWithNoTitleButIidSetTest() {
+    @DisplayName("CreateErrors5: Attempt to create an issue with no title, but with iid (requires Admin rights)")
+    void createIssueWithNoTitleButIidSetTest() {
         // prepare and send request
         IssueCreateRequest createRequest = new IssueCreateRequest(null)
                 .setIid(getRandomLong());
@@ -116,7 +116,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @Test
-    @DisplayName("CreateErrors5: Attempt to create issue with incorrect issue type")
+    @DisplayName("CreateErrors6: Attempt to create issue with incorrect issue type")
     void createIssueWithIncorrectIssueTypeTest() {
         // Prepare and send request with an incorrect issue type.
         IssueCreateRequest createRequest = new IssueCreateRequest(
@@ -133,7 +133,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @Test
-    @DisplayName("CreateErrors6: Attempt to create issue with start date after the due date")
+    @DisplayName("CreateErrors7: Attempt to create issue with start date after the due date")
     void createIssueWithStartDateAfterDueDateTest() {
         // Prepare and send request with a start date after the due date.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Start date after due date test"))
@@ -150,7 +150,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @Test
-    @DisplayName("CreateErrors7: Attempt to create issue with too long title")
+    @DisplayName("CreateErrors8: Attempt to create issue with too long title")
     void createIssueWithTooLongTitleTest() {
         // Prepare and send request with a title that exceeds the maximum allowed length.
         String longTitle = "A".repeat(256); // the max length is 255 characters.
@@ -169,7 +169,7 @@ public class CreateIssueErrorsTest extends BaseTest {
     // GitLab appears to stop validation after the first error (at least in this case) rather than  returning all validation errors in a single response.
     // let's treat is as expected behavior for now, but we can revisit if needed.
     @Test
-    @DisplayName("CreateErrors8: Attempt to create issue with several validation errors")
+    @DisplayName("CreateErrors9: Attempt to create issue with several validation errors")
     void createIssueWithSeveralErrorsTest() {
         // Send a request containing multiple validation errors:
         // title is too long and start date is after due date.
@@ -190,7 +190,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @Test
-    @DisplayName("CreateErrors9: Attempt to create issue with empty title")
+    @DisplayName("CreateErrors10: Attempt to create issue with empty title")
     void createTwoIssuesWithEmptyTitleTest() {
         // Prepare and send request to create the first issue with an empty title.
         IssueCreateRequest createRequest = new IssueCreateRequest("");
@@ -205,7 +205,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @ParameterizedTest
-    @DisplayName("CreateErrors10: Attempt to create issue for an invalid numeric project ID")
+    @DisplayName("CreateErrors11: Attempt to create issue for an invalid numeric project ID")
     @ValueSource(longs = {0, -1, -999})
     void createIssueWithInvalidNumericProjectIdTest(long invalidProjectId) {
         // Prepare and send request to create an issue with an invalid project ID.
@@ -220,7 +220,7 @@ public class CreateIssueErrorsTest extends BaseTest {
     }
 
     @ParameterizedTest
-    @DisplayName("CreateErrors11: Attempt to create issue for non-existent or empty string project ID")
+    @DisplayName("CreateErrors12: Attempt to create issue for non-existent or empty string project ID")
     @ValueSource(strings = {"null", "%ZZ", "non_existing_project"})
     void createIssueWithNonExistentStringProjectIdTest(String nonExistentProjectId) {
         // Prepare and send request to create an issue with a non-existent or empty string project ID.
@@ -236,7 +236,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @ParameterizedTest
-    @DisplayName("CreateErrors12: Attempt to create issue for an invalid string project ID")
+    @DisplayName("CreateErrors13: Attempt to create issue for an invalid string project ID")
     @ValueSource(strings = {"", "project name/with spaces"})
     void createIssueWithInvalidStringProjectIdTest(String invalidProjectId) {
         // Prepare and send request to create an issue with an invalid project ID.
@@ -253,7 +253,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"not-a-number", "2026-09-05T12:00:00Z"})
-    @DisplayName("CreateErrors13: Attempt to create issue with non-numeric assignee ID")
+    @DisplayName("CreateErrors14: Attempt to create issue with non-numeric assignee ID")
     void createIssueWithNonNumericAssigneeIdTest(String nonNumericAssigneeId) {
         // Prepare and send request to create an issue with a non-numeric assignee ID.
         Map<String, Object> requestBody = new HashMap<>();
@@ -272,7 +272,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"not-a-number", "2026-09-05T12:00:00Z"})
-    @DisplayName("CreateErrors14: Attempt to create issue with non-boolean confidential field")
+    @DisplayName("CreateErrors15: Attempt to create issue with non-boolean confidential field")
     void createIssueWithNonBooleanConfidentialFieldTest(String nonBooleanConfidential) {
         // Prepare and send request to create an issue with a non-boolean confidential field.
         Map<String, Object> requestBody = new HashMap<>();
@@ -290,7 +290,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    @DisplayName("CreateErrors14: Attempt to create issue with empty confidential field")
+    @DisplayName("CreateErrors16: Attempt to create issue with empty confidential field")
     void createIssueWithEmptyConfidentialFieldTest(String nonBooleanConfidential) {
         // Prepare and send request to create an issue with a empty confidential field.
         Map<String, Object> requestBody = new HashMap<>();
@@ -308,7 +308,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @ParameterizedTest
-    @DisplayName("CreateErrors15: Attempt to create issue with created_at not representing a date-time (requires Admin rights)")
+    @DisplayName("CreateErrors17: Attempt to create issue with created_at not representing a date-time (requires Admin rights)")
     @ValueSource(strings = {"not-a-date", "2026-39-05T12:00:00Z"})
     void createIssueWithInvalidCreatedAtFieldTest(String invalidCreatedAt) {
         // Prepare and send request to create an issue with a created_at field that does not represent a date-time.
@@ -327,8 +327,8 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @Test
-    @DisplayName("CreateErrors16: Attempt to create an issue with too long description")
-    public void createIssueWithTooLongDescriptionTest() {
+    @DisplayName("CreateErrors18: Attempt to create an issue with too long description")
+    void createIssueWithTooLongDescriptionTest() {
            // prepare and send request
         String longDescription = "A".repeat(1_048_577); // 32 x 33000 = 1056000 characters, max value is 1,048,576
             IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Test title"))
@@ -344,8 +344,8 @@ public class CreateIssueErrorsTest extends BaseTest {
 
     @Test
     @Tag("WIP") // FINDING-2 It is possible to create issue with due date in the past, but probably it should not be allowed. This test is marked as WIP until the issue is fixed.
-    @DisplayName("CreateErrors17: Attempt to create issue with due date in the past")
-    public void createIssueWithDueDateInThePastTest() {
+    @DisplayName("CreateErrors19: Attempt to create issue with due date in the past")
+    void createIssueWithDueDateInThePastTest() {
         // prepare and send request
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Test title"))
                 .setDueDate("2020-01-01");
@@ -358,12 +358,34 @@ public class CreateIssueErrorsTest extends BaseTest {
         checkIssueIsAbsent(PROJECT_ID, createRequest.getTitle());
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"not-a-date", "2026-39-05"})
+    @DisplayName("CreateErrors20: Attempt to create issue with invalid due date")
+    void createIssueWithInvalidDueDateTest(String invalidDueDate) {
+        // Prepare and send request to create an issue with an invalid due date.
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("title", generateUniqueIssueTitle("Invalid due date test"));
+        requestBody.put("due_date", invalidDueDate);
+
+        Response response = getRestBase().postInternal(requestBody, projectIssuesUrl(PROJECT_ID));
+
+        // check that issue is created correctly with due_date set to null
+        assertThat(response.statusCode()).as("Response code should be 201, but was "+ response.statusCode()).isEqualTo(201);
+        Issue created = response.as(Issue.class);
+        assertThat(created).as("Created issue should not be null").isNotNull();
+        assertThat(created.dueDate()).as("Created issue due_date should be null").isNull();
+
+        // Clean up
+        deleteIssue(created.iid());
+    }
+
+
 
     @Tag("WIP") // FINDING-4 Handling of invalid  (negative or too big) iid's in create request is incorrect.  You receive: "message": "500 Internal Server Error".
     // But even worse - issue is created and it breaks the system - you can't view issues in UI anymore and GetIssues request is also returning 500 error.
     // Good news is that the issue can be deleted via API and then everything works again (you will receive another 500 error, but issue will be deleted). This test is marked as WIP until the issue is fixed.
     @ParameterizedTest
-    @DisplayName("CreateErrors18: Attempt to create issue with invalid integer iid's (Requires Admin rights)")
+    @DisplayName("CreateErrors21: Attempt to create issue with invalid integer iid's (Requires Admin rights)")
     @ValueSource(longs = {-1, -999, Long.MAX_VALUE})
     void createIssueWithInvalidIidTest(long invalidIid) {
 
@@ -383,8 +405,8 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @Test
-    @DisplayName("CreateErrors19: Attempt to create an issue with non-string issue_type")
-    public void createIssueWithNonStringIssueTypeTest() {
+    @DisplayName("CreateErrors22: Attempt to create an issue with non-string issue_type")
+    void createIssueWithNonStringIssueTypeTest() {
         // Prepare and send request to create an issue with a non-string issue_type.
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("title", generateUniqueIssueTitle("Non-string issue_type test"));
@@ -401,8 +423,8 @@ public class CreateIssueErrorsTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("CreateErrors20: Attempt to create an issue with non-string labels")
-    public void createIssueWithNonStringLabelsTest() {
+    @DisplayName("CreateErrors23: Attempt to create an issue with non-string labels")
+    void createIssueWithNonStringLabelsTest() {
         // Prepare and send request to create an issue with non-string labels.
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("title", generateUniqueIssueTitle("Non-string labels test"));
@@ -422,8 +444,8 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @Test
-    @DisplayName("CreateErrors21: Attempt to create an issue with non-numeric milestone_id")
-    public void createIssueWithNonNumericMilestoneIdTest() {
+    @DisplayName("CreateErrors24: Attempt to create an issue with non-numeric milestone_id")
+    void createIssueWithNonNumericMilestoneIdTest() {
         // Prepare and send request to create an issue with a non-numeric milestone_id.
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("title", generateUniqueIssueTitle("Non-numeric milestone_id test"));
@@ -439,8 +461,8 @@ public class CreateIssueErrorsTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("CreateErrors22: Attempt to create an issue with negative milestone_id")
-    public void createIssueWithNegativeMilestoneIdTest() {
+    @DisplayName("CreateErrors25: Attempt to create an issue with negative milestone_id")
+    void createIssueWithNegativeMilestoneIdTest() {
         // Prepare and send request to create an issue with a negative milestone_id.
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("title", generateUniqueIssueTitle("Negative milestone_id test"));
@@ -461,8 +483,8 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @Test
-    @DisplayName("CreateErrors23: Attempt to create an issue with incorrect string severity")
-    public void createIssueWithIncorrectStringSeverityTest() {
+    @DisplayName("CreateErrors26: Attempt to create an issue with incorrect string severity")
+    void createIssueWithIncorrectStringSeverityTest() {
         // Prepare and send request to create an issue with an incorrect string severity.
         // prepare and send request
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Test title"))
@@ -477,8 +499,8 @@ public class CreateIssueErrorsTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("CreateErrors24: Attempt to create an issue with non-string severity")
-    public void createIssueWithNonStringSeverityTest() {
+    @DisplayName("CreateErrors27: Attempt to create an issue with non-string severity")
+    void createIssueWithNonStringSeverityTest() {
         // Prepare and send request to create an issue with a non-string severity.
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("title", generateUniqueIssueTitle("Non-string severity test"));
@@ -494,9 +516,26 @@ public class CreateIssueErrorsTest extends BaseTest {
 
     }
 
+    @Test
+    @DisplayName("CreateErrors28: Create non-incident issue with severity field set (should be ignored)")
+    void createNonIncidentIssueWithSeverityTest() {
+        // Prepare and send request with severity field set for a non-incident issue.
+        IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Non-incident issue with severity"))
+                .setIssueType("issue")
+                .setSeverity("high");
+        Issue created = createIssue(createRequest);
+
+        // Check that issue creation succeeds and the severity field is ignored (should be "UNKNOWN").
+        assertThat(created).isNotNull();
+        assertThat(created.issueType()).isEqualTo("issue");
+        assertThat(created.severity()).isEqualTo("UNKNOWN"); // Severity should be ignored for non-incident issues and default to "UNKNOWN".
+
+        // Clean up
+        deleteIssue(created.iid());
+    }
 
     @ParameterizedTest
-    @DisplayName("CreateErrors25: Attempt to create issue with start_date not representing a date-time")
+    @DisplayName("CreateErrors29: Attempt to create issue with start_date not representing a date-time")
     @ValueSource(strings = {"not-a-date", "2026-39-05T12:00:00Z"})
     void createIssueWithInvalidStartDateFieldTest(String invalidStartDate) {
         // Prepare and send request to create an issue with a start_date field that does not represent a date-time.
@@ -517,7 +556,7 @@ public class CreateIssueErrorsTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("CreateErrors26: Attempt to create issue with non-string start_date value")
+    @DisplayName("CreateErrors30: Attempt to create issue with non-string start_date value")
     void createIssueWithNonStringStartDateFieldTest() {
         // Prepare and send request to create an issue with a non-string start_date field.
         Map<String, Object> requestBody = new HashMap<>();
@@ -538,7 +577,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
 
     @Test
-    @DisplayName("CreateErrors27: Attempt to create issue with non-string title value")
+    @DisplayName("CreateErrors31: Attempt to create issue with non-string title value")
     void createIssueWithNonStringTitleFieldTest() {
         // Prepare and send request to create an issue with a non-string title field.
         Map<String, Object> requestBody = new HashMap<>();
@@ -556,6 +595,7 @@ public class CreateIssueErrorsTest extends BaseTest {
         deleteIssue(created.iid());
 
     }
+
 
 
 }

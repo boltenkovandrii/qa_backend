@@ -25,7 +25,7 @@ public class CreateIssueTest extends BaseTest {
 
     @Test
     @DisplayName("Create1: Create issue with only mandatory fields")
-    public void createIssueMandatoryFieldsTest() {
+    void createIssueMandatoryFieldsTest() {
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Test title"));
         Issue created = createIssue(createRequest);
 
@@ -47,7 +47,7 @@ public class CreateIssueTest extends BaseTest {
 
     @Test
     @DisplayName("Create2: Create issue with all fields")
-    public void createIssueAllFieldsTest() {
+    void createIssueAllFieldsTest() {
 
         // prepare and send request
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Test title"))
@@ -95,7 +95,7 @@ public class CreateIssueTest extends BaseTest {
 
     @Test
     @DisplayName("Create3: Create issue with non-existing milestone ID")
-    public void createIssueWithNonExistingMilestoneIdTest() {
+    void createIssueWithNonExistingMilestoneIdTest() {
         // Prepare and send request.
         // A non-existing milestone ID avoids dependency on project milestone configuration.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Test issue"))
@@ -115,7 +115,7 @@ public class CreateIssueTest extends BaseTest {
 
     @Test
     @DisplayName("Create4: Create confidential issue")
-    public void createConfidentialIssueTest() {
+    void createConfidentialIssueTest() {
         // Prepare and send request.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Confidential issue"))
                 .setConfidential(true);
@@ -132,7 +132,7 @@ public class CreateIssueTest extends BaseTest {
 
     @Test
     @DisplayName("Create5: Create issue with date created in the future (requires Admin rights)")
-    public void createIssueWithFutureCreatedAtTest() {
+    void createIssueWithFutureCreatedAtTest() {
         // Prepare and send request.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Future created issue"))
                 .setCreatedAt("2050-01-01T12:00:00Z");
@@ -148,8 +148,8 @@ public class CreateIssueTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Create5: Create issue with non-existing assignee ID")
-    public void createIssueWithNonExistingAssigneeIdTest() {
+    @DisplayName("Create6: Create issue with non-existing assignee ID")
+    void createIssueWithNonExistingAssigneeIdTest() {
         // Prepare and send request.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Test issue"))
                 .setAssigneeId(9999999999L); // Non-existing assignee ID
@@ -167,8 +167,8 @@ public class CreateIssueTest extends BaseTest {
 
 
     @Test
-    @DisplayName("Create6: Create issue with very long (but still valid) description") // Limited to 1,048,576 characters on GitLab
-    public void createIssueWithLongDescriptionTest() {
+    @DisplayName("Create7: Create issue with very long (but still valid) description") // Limited to 1,048,576 characters on GitLab
+    void createIssueWithLongDescriptionTest() {
         // Prepare and send request.
         String longDescription = "A".repeat(1_048_576); // 1,048,576 characters long
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Test issue"))
@@ -184,8 +184,8 @@ public class CreateIssueTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Create7: Create issue with special characters in the title and description")
-    public void createIssueWithSpecialCharactersTest() {
+    @DisplayName("Create8: Create issue with special characters in the title and description")
+    void createIssueWithSpecialCharactersTest() {
         // Prepare and send request.
         String specialTitle = "Special characters: !@#$%^&*()_+-=[]{}|;':\",.<>/?`~";
         String specialDescription = "Description with special characters: !@#$%^&*()_+-=[]{}|;':\",.<>/?`~";
@@ -207,7 +207,7 @@ public class CreateIssueTest extends BaseTest {
     @ParameterizedTest
 //    @ValueSource(strings = {"issue", "incident", "test_case", "task"})
     @ValueSource(strings = {"issue", "incident", "task"})
-    @DisplayName("Create8: Create issue with supported issue type")
+    @DisplayName("Create9: Create issue with supported issue type")
     void createIssueWithSupportedIssueTypeTest(String issueType) {
         // Prepare and send request.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Issue type test"))
@@ -224,7 +224,7 @@ public class CreateIssueTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Create9: Create issue without issue type")
+    @DisplayName("Create10: Create issue without issue type")
     void createIssueWithoutIssueTypeTest() {
         // Prepare and send request without specifying the issue type.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Default issue type"));
@@ -239,7 +239,7 @@ public class CreateIssueTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Create10: Create issue with long list of labels")
+    @DisplayName("Create11: Create issue with long list of labels")
     void createIssueWithLongListOfLabelsTest() {
         // Prepare and send request with a long list of labels.
         String longLabelsList = "label1,label2,label3,label4,label5,label6,label7,label8,label9,label10";
@@ -258,7 +258,7 @@ public class CreateIssueTest extends BaseTest {
 
 
     @Test
-    @DisplayName("Create10: Create issue special symbols in labels")
+    @DisplayName("Create12: Create issue special symbols in labels")
     void createIssueWithSpecialSymbolsInLabelsTest() {
         // Prepare and send request with special symbols in labels.
         String specialLabels = "label!@#$%^&*(),label[]{}|;':\",.<>/?`~";
@@ -277,7 +277,7 @@ public class CreateIssueTest extends BaseTest {
 
 
     @Test
-    @DisplayName("Create11: Create issue with non-ascii characters in text fields")
+    @DisplayName("Create13: Create issue with non-ascii characters in text fields")
     void createIssueWithNonAsciiCharactersTest() {
         // Prepare and send request with non-ASCII characters in title and description.
         String nonAsciiTitle = generateUniqueIssueTitle("Non-ASCII title: Привет, 你好, مرحبا, नमस्ते");
@@ -302,7 +302,7 @@ public class CreateIssueTest extends BaseTest {
 
 
     @Test
-    @DisplayName("Create12: Create issue empty severity field")
+    @DisplayName("Create14: Create issue with empty severity field")
     void createIssueWithEmptySeverityTest() {
         // Prepare and send request with an empty severity field.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Empty severity test"))
@@ -321,7 +321,7 @@ public class CreateIssueTest extends BaseTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"unknown", "low", "medium", "high", "critical"})
-    @DisplayName("Create13: Create issue with supported severity values for incidents")
+    @DisplayName("Create15: Create issue with supported severity values for incidents")
     void createIssueWithSupportedSeverityValuesTest(String severity) {
         // Prepare and send request with supported severity values.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Supported severity test"))
@@ -340,7 +340,7 @@ public class CreateIssueTest extends BaseTest {
 
 
     @Test
-    @DisplayName("Create14: Create issue with start date in the past")
+    @DisplayName("Create16: Create issue with start date in the past")
     void createIssueWithPastStartDateTest() {
         // Prepare and send request with a start date in the past.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Paste start date test"))
@@ -357,7 +357,7 @@ public class CreateIssueTest extends BaseTest {
 
 
     @Test
-    @DisplayName("Create14: Create issue with very long title (limited to 255 characters on GitLab)")
+    @DisplayName("Create17: Create issue with very long title (limited to 255 characters on GitLab)")
     void createIssueWithVeryLongTitleTest() {
         // Prepare and send request with a very long title.
         String veryLongTitle = "A".repeat(255); // 255 characters long
@@ -374,7 +374,7 @@ public class CreateIssueTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Create15: Create two issues with the same title")
+    @DisplayName("Create18: Create two issues with the same title")
     void createTwoIssuesWithSameTitleTest() {
         // Prepare and send request to create the first issue.
         String duplicateTitle = generateUniqueIssueTitle("Duplicate title test");
@@ -400,7 +400,7 @@ public class CreateIssueTest extends BaseTest {
     @Test
     @Tag("WIP") //FINDING-3 according to GitLab API documentation, the iid field could be a string, but in practice, it seems to only accept numeric values.
     // This test is marked as WIP and represents existing logic - not the one descried in documentation.
-    @DisplayName("Create16: Create issue with string iid (requires Admin rights)")
+    @DisplayName("Create19: Create issue with string iid (requires Admin rights)")
     void createIssueWithStringIidTest() {
         // Prepare and send request with a string iid.
         Map<String, Object> requestBody = new HashMap<>();
@@ -412,6 +412,26 @@ public class CreateIssueTest extends BaseTest {
         // Check that issue creation fails with a 400 Bad Request status code.
         assertThat(response.statusCode()).isEqualTo(400);
 
+    }
+
+
+    @Test
+    @DisplayName("Create20: Create issue with start date equal to due date")
+    void createIssueWithEqualStartAndDueDateTest() {
+        // Prepare and send request with start date equal to due date.
+        IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Equal start and due date"))
+                        .setStartDate("2026-09-30")
+                        .setDueDate("2026-09-30");
+        Issue created = createIssue(createRequest);
+
+
+        // Check that issue creation succeeds and the start date and due date are set correctly.
+        assertThat(created).isNotNull();
+        assertThat(created.startDate()).isEqualTo("2026-09-30");
+        assertThat(created.dueDate()).isEqualTo("2026-09-30");
+
+        // Clean up
+        deleteIssue(created.iid());
     }
 
 }
