@@ -6,6 +6,7 @@ import com.abnamro.assignment.model.IssueCreateRequest;
 import io.restassured.response.Response;
 import org.apache.commons.configuration2.CompositeConfiguration;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
@@ -41,6 +42,18 @@ public class BaseTest {
         return random.nextLong(1, Integer.MAX_VALUE); // Use Integer.MAX_VALUE to avoid overflow issues
     }
 
+    protected void assertIssueHasDefaultValues(Issue issue, String title) {
+        assertThat(issue).as("Issue should not be null").isNotNull();
+        assertThat(issue.title()).isEqualTo(title);
+        assertThat(issue.author()).isNotNull();
+        assertThat(issue.author().id()).isEqualTo(USER_ID);
+        assertThat(issue.confidential()).isEqualTo(false);
+        assertThat(issue.createdAt()).isNotNull();
+        assertThat(issue.issueType()).isEqualTo("issue");
+        assertThat(issue.labels()).isEmpty();
+        assertThat(issue.description()).isNull();
+    }
+
     protected void assertIssueMatchesRequest(Issue issue, IssueCreateRequest request) {
         assertThat(issue).as("Issue should not be null").isNotNull();
 
@@ -48,7 +61,7 @@ public class BaseTest {
         assertThat(issue.assignee().id()).isEqualTo(request.getAssigneeId());
         assertThat(issue.confidential()).isEqualTo(request.getConfidential());
         if (request.getCreatedAt() != null) {
-            assertThat(issue.createdAt()).isEqualTo(java.time.Instant.parse(request.getCreatedAt()));
+            assertThat(issue.createdAt()).isEqualTo(Instant.parse(request.getCreatedAt()));
         }else {
             assertThat(issue.createdAt()).isNull();
         }
