@@ -685,5 +685,27 @@ public class UpdateIssueTest extends BaseTest {
         //cleanup
         deleteIssue(created.iid());
     }
+
+    @Test
+    @DisplayName("Update28: Update issue using URL encoded project path")
+    void updateIssueUsingUrlEncodedProjectPathTest() {
+        // Prepare and send create request
+        IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Update issue using URL encoded project path"));
+        Issue created = createIssue(createRequest);
+
+        // Build and send update request to update the issue title using URL encoded project path
+        String newTitle = generateUniqueIssueTitle("Updated title using URL encoded project path");
+        Issue updated = updateIssueRaw(PROJECT_PATH, created.iid(), new IssueUpdateRequest().setTitle(newTitle)).as(Issue.class);
+
+        // Check that the issue is updated correctly
+        assertThat(updated.title()).isEqualTo(newTitle);
+
+        // Retrieve the issue and check that it is updated correctly
+        Issue retrieved = getIssue(created.iid());
+        assertThat(retrieved.title()).isEqualTo(newTitle);
+
+        // Clean up
+        deleteIssue(created.iid());
+    }
 }
 

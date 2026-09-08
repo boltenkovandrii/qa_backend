@@ -99,7 +99,7 @@ public class UpdateIssueErrorsTest extends BaseTest {
                 new IssueUpdateRequest().setTitle("Updated title"));
 
         // check response
-        assertError(response, 404, "404 Not Found");
+        assertError(response, 404, NOT_FOUND_MESSAGE);
 
         // Clean up
         deleteIssue(created.iid());
@@ -117,7 +117,7 @@ public class UpdateIssueErrorsTest extends BaseTest {
                 Integer.MAX_VALUE,
                 updateRequest);
 
-        assertMessage(response, 404, "404 Not found");
+        assertMessage(response, 404, NOT_FOUND_MESSAGE);
     }
 
     @ParameterizedTest
@@ -134,7 +134,7 @@ public class UpdateIssueErrorsTest extends BaseTest {
                 updateRequest);
 
         //  check response
-        assertMessage(response, 404, "404 Not found");
+        assertMessage(response, 404, NOT_FOUND_MESSAGE);
     }
 
     @Test

@@ -19,6 +19,7 @@ public class BaseTest {
     protected static final String TEST_ISSUE_PREFIX = config.getString("TEST_ISSUE_PREFIX");
     protected static final long PROJECT_ID = config.getLong("GITLAB_PROJECT_ID");
     protected static final long USER_ID = config.getLong("GITLAB_USER_ID");
+    protected static final String PROJECT_PATH = config.getString("GITLAB_PROJECT_PATH");
 
     protected static final String NOT_FOUND_MESSAGE = "404 Not found";
     protected static final String ISSUE_NOT_FOUND_MESSAGE = "404 Issue Not Found";

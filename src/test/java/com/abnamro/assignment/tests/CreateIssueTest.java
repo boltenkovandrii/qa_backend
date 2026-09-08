@@ -436,5 +436,25 @@ public class CreateIssueTest extends BaseTest {
         deleteIssue(created.iid());
     }
 
+
+    @Test
+    @DisplayName("Create21: Create issue using URL encoded project path")
+    void createIssueUsingUrlEncodedProjectPathTest() {
+        // Prepare and send request using URL encoded project path.
+        IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("URL encoded project path test"));
+        Issue created = createIssueRaw(PROJECT_PATH, createRequest).as(Issue.class);
+
+        // Check that issue creation succeeds and the title is set correctly.
+        assertThat(created).isNotNull();
+        assertThat(created.title()).isEqualTo(createRequest.getTitle());
+
+        //retrieve the issue and check that it is created correctly
+        Issue retrieved = getIssue(created.iid());
+        assertThat(retrieved).isNotNull();
+        assertThat(retrieved.title()).isEqualTo(createRequest.getTitle());
+
+        // Clean up
+        deleteIssue(created.iid());
+    }
 }
 

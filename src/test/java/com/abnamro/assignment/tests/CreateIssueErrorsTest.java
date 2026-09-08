@@ -244,7 +244,7 @@ public class CreateIssueErrorsTest extends BaseTest {
         Response response = createIssueRaw(invalidProjectId, createRequest);
 
         // Check that the response indicates a bad request due to the invalid project ID.
-        assertError(response, 404, "404 Not Found");
+        assertError(response, 404, NOT_FOUND_MESSAGE);
 
         // The issue must not be created.
         checkIssueIsAbsent(PROJECT_ID, createRequest.getTitle());

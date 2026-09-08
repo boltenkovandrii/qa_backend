@@ -35,7 +35,7 @@ public class RestBase {
     }
 
     private RequestSpecification authenticatedRequest() {
-        return given().config(rConfig).spec(reqSpec).header("PRIVATE-TOKEN", config.getString("GITLAB_ACCESS_TOKEN"));
+        return given().config(rConfig).spec(reqSpec).header("PRIVATE-TOKEN", config.getString("GITLAB_ACCESS_TOKEN")).urlEncodingEnabled(false);
     }
 
     public Response getInternal(String URI) {

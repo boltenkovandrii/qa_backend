@@ -143,7 +143,7 @@ public class IssuesAPI {
     }
 
     private static String projectIssuesUrl(String projectId) {
-        return PROJECT_ISSUES_URL + projectId + "/issues";
+        return PROJECT_ISSUES_URL + projectId.replace("/", "%2F") + "/issues";
     }
 
     public static RestBase getRestBase() {
