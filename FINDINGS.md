@@ -17,3 +17,5 @@ Even worse - issue is created and it breaks the system - you can't view issues i
 Good news is that the issue can be deleted via API and then everything works again (you will receive another 500 error, but issue will be deleted)
 
 **FINDING-5** Looks like you can't change issue type to an incident and set severity in the same update request. Severity remains UNKNOWN for non-incident issues.
+
+**FINDING-6** sending non-string labels in update request is accepted by GitLab API, but request is not ignored and actually updates the issue labels to an empty list. This is unexpected behavior and should be investigated further.

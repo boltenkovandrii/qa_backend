@@ -666,5 +666,24 @@ public class UpdateIssueTest extends BaseTest {
         // Clean up
         deleteIssue(created.iid());
     }
+
+    @Test
+    @DisplayName("Update27: Update issue with maximum allowed title length")
+    void updateIssueMaxTitleLengthTest() {
+        // Prepare and send create request
+        Issue created = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Update issue with maximum allowed title length")));
+
+        // Build and send update request to set the issue title to maximum allowed length (255 characters)
+        String newTitle = "A".repeat(255);
+        Issue updated = updateIssue(
+                created.iid(),
+                new IssueUpdateRequest().setTitle(newTitle));
+
+        // Check that the issue is updated correctly
+        assertThat(updated.title()).isEqualTo(newTitle);
+
+        //cleanup
+        deleteIssue(created.iid());
+    }
 }
 
