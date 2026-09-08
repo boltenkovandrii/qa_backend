@@ -23,7 +23,7 @@ Keep this file updated with any special instructions or dependencies so reviewer
 - GitLab account with a application configured and personal access token (PAT) with `api` scope. It is supposed that use has admin rights in the test project.
 
 ### Configuration
-- Set GITLAB_PROJECT_ID and GITLAB_USER_ID `src/test/resources/config.properties`
+- Set GITLAB_PROJECT_ID, GITLAB_PROJECT_PATH and GITLAB_USER_ID `src/test/resources/config.properties`
 - Create file `src/test/resources/gitlab.properties` based on provided sample and store your GitLab personal access token (PAT) in it. 
 <span style="color:#AA2222">**The file is ignored by git and should never be committed to the repository.**</span>
 - For CI runs, create environment variable `GITLAB_ACCESS_TOKEN` with personal access token (Settings-> Secrets and variables-> Actions-> New repository secret).

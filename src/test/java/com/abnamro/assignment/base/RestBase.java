@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.LogConfig.logConfig;
@@ -39,10 +40,14 @@ public class RestBase {
     }
 
     public Response getInternal(String URI) {
+        return getInternal(URI, Map.of());
+    }
+
+    public Response getInternal(String URI, Map<String, ?> queryParams) {
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
             try {
                 LOGGER.info("Sending GET request on {} (attempt {}/{})", URI, attempt, maxAttempts);
-                Response response = authenticatedRequest().when().get(URI);
+                Response response = authenticatedRequest().queryParams(queryParams).when().get(URI);
 
                 if (!needRetry(response.getStatusCode()) || attempt == maxAttempts) {
                     return response;

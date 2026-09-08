@@ -325,6 +325,7 @@ public class CreateIssueErrorsTest extends BaseTest {
     }
 
 
+    //TODO: Investigate flakiness. Could lead to "javax.net.ssl.SSLException: Received fatal alert: bad_record_mac"
     @Test
     @DisplayName("CreateErrors18: Attempt to create an issue with too long description")
     void createIssueWithTooLongDescriptionTest() {
