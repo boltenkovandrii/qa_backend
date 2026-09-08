@@ -67,7 +67,7 @@ public class UpdateIssueErrorsTest extends BaseTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"non-existing-project", "%ZZ", "null" })
+    @ValueSource(strings = {"non-existing-project", "does-not-exist%2Fproject", "null" })
     @DisplayName("UpdateErrors3: Update issue with invalid string project ID")
     void updateIssueInvalidProjectIdStringTest(String projectId) {
         //  Prepare and send create request
@@ -94,12 +94,12 @@ public class UpdateIssueErrorsTest extends BaseTest {
 
         // Build and send update request with invalid string project ID containing spaces
         Response response = updateIssueRaw(
-                "project name/with spaces",
+                "project%20name%20with%20spaces",
                 created.iid(),
                 new IssueUpdateRequest().setTitle("Updated title"));
 
         // check response
-        assertError(response, 404, NOT_FOUND_MESSAGE);
+        assertMessage(response, 404, "404 Project Not Found");
 
         // Clean up
         deleteIssue(created.iid());

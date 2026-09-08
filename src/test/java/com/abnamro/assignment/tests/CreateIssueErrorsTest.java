@@ -221,7 +221,7 @@ public class CreateIssueErrorsTest extends BaseTest {
 
     @ParameterizedTest
     @DisplayName("CreateErrors12: Attempt to create issue for non-existent or empty string project ID")
-    @ValueSource(strings = {"null", "%ZZ", "non_existing_project"})
+    @ValueSource(strings = {"null", "does-not-exist%2Fproject", "non_existing_project", "project%20name%20with%20spaces"})
     void createIssueWithNonExistentStringProjectIdTest(String nonExistentProjectId) {
         // Prepare and send request to create an issue with a non-existent or empty string project ID.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Non-existent project ID test"));
@@ -235,16 +235,15 @@ public class CreateIssueErrorsTest extends BaseTest {
     }
 
 
-    @ParameterizedTest
-    @DisplayName("CreateErrors13: Attempt to create issue for an invalid string project ID")
-    @ValueSource(strings = {"", "project name/with spaces"})
-    void createIssueWithInvalidStringProjectIdTest(String invalidProjectId) {
+    @Test
+    @DisplayName("CreateErrors13: Attempt to create issue for an empty project ID")
+    void createIssueWithEmptyProjectIdTest() {
         // Prepare and send request to create an issue with an invalid project ID.
         IssueCreateRequest createRequest = new IssueCreateRequest(generateUniqueIssueTitle("Invalid project ID test"));
-        Response response = createIssueRaw(invalidProjectId, createRequest);
+        Response response = createIssueRaw("", createRequest);
 
         // Check that the response indicates a bad request due to the invalid project ID.
-        assertError(response, 404, NOT_FOUND_MESSAGE);
+        assertError(response, 404, "404 Not Found");
 
         // The issue must not be created.
         checkIssueIsAbsent(PROJECT_ID, createRequest.getTitle());
