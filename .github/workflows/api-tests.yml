@@ -14,6 +14,12 @@
             - Reset
             - Cleanup
 
+        threads:
+          description: "Number of parallel test threads"
+          required: true
+          default: "2"
+          type: string
+
     push:
       branches:
         - main
@@ -29,6 +35,8 @@
 
       env:
         TEST_SCOPE: ${{ github.event_name == 'workflow_dispatch' && inputs.scope || 'UnitTest' }}
+        TEST_THREADS: ${{ github.event_name == 'workflow_dispatch' && inputs.threads || '2' }}
+
         GITLAB_ACCESS_TOKEN: ${{ secrets.GITLAB_ACCESS_TOKEN }}
         GITLAB_PROJECT_ID: ${{ vars.GITLAB_PROJECT_ID }}
         GITLAB_ADMIN_USER_ID: ${{ vars.GITLAB_ADMIN_USER_ID }}
@@ -44,15 +52,17 @@
             java-version: "17"
             cache: maven
 
+        - name: Make Maven wrapper executable
+          run: chmod +x ./mvnw
+
         - name: Run tests
-          id: tests
-          shell: bash
           run: |
-            ./mvnw clean test -Dscope="${TEST_SCOPE}"
+            ./mvnw clean test \
+              -Dscope="${TEST_SCOPE}" \
+              -Dthreads="${TEST_THREADS}"
 
         - name: Generate Allure report
           if: always()
-          shell: bash
           run: |
             ./mvnw allure:report
 
