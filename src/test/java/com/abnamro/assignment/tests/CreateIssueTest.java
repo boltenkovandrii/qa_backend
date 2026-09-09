@@ -39,7 +39,7 @@ public class CreateIssueTest extends BaseTest {
         // Retrieve the issue and check that it is created correctly
         Issue retrieved = getIssue(created.iid());
         assertThat(retrieved).as("Retrieved issue should not be null").isNotNull();
-        verifyBasicResponseFields(retrieved, "opened");
+        verifyBasicResponseFields(retrieved, "opened-----");
         assertThat(retrieved.title()).isEqualTo(createRequest.getTitle());
 
         // Clean up
