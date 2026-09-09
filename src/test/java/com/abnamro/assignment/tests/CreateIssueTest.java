@@ -189,7 +189,7 @@ public class CreateIssueTest extends BaseTest {
     @DisplayName("Create8: Create issue with special characters in the title and description")
     void createIssueWithSpecialCharactersTest() {
         // Prepare and send request.
-        String specialTitle = "Special characters: !@#$%^&*()_+-=[]{}|;':\",.<>/?`~";
+        String specialTitle = generateUniqueIssueTitle("Special characters: !@#$%^&*()_+-=[]{}|;':\",.<>/?`~");
         String specialDescription = "Description with special characters: !@#$%^&*()_+-=[]{}|;':\",.<>/?`~";
         IssueCreateRequest createRequest = new IssueCreateRequest(specialTitle)
                 .setDescription(specialDescription);
