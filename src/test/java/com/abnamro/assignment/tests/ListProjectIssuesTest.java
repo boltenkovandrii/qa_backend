@@ -600,5 +600,25 @@ public class ListProjectIssuesTest extends BaseTest {
         deleteIssue(created.iid());
     }
 
+
+    @Test
+    @DisplayName("ListIssues26: List issues using URL encoded project path")
+    void listIssuesUsingUrlEncodedProjectPathTest() {
+        // Create an issue to ensure there is at least one issue in the project
+        Issue created = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("URL encoded project path test")));
+
+        // List issues using URL encoded project path
+        Response response = getIssuesRaw(PROJECT_PATH, Map.of());
+
+        //check response status code
+        assertThat(response.statusCode()).isEqualTo(200);
+        // Verify that the returned issues list is not empty
+        List<Issue> issues =response.jsonPath().getList("", Issue.class);
+        assertThat(issues).as("Check that result is not empty").isNotEmpty();
+
+        // Cleanup
+        deleteIssue(created.iid());
+    }
+
 }
 

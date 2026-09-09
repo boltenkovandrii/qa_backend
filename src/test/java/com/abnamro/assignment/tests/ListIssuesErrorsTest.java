@@ -111,6 +111,26 @@ public class ListIssuesErrorsTest extends BaseTest {
         assertThat(issues).as("Check that no issues are returned for invalid IID '%s'", iid).isEmpty();
     }
 
+    @ParameterizedTest
+    @DisplayName("ListIssuesErrors8: Attempt to list issues for invalid numeric project IDs")
+    @ValueSource(longs = {-1, 0, 999999999})
+    void listIssuesWithInvalidNumericProjectIdTest(long projectId) {
+        // Request the issue list with an invalid project ID
+        Response response = getIssuesRaw(projectId, Map.of());
+
+        assertMessage(response, 404, "404 Project Not Found");
+    }
+
+    @ParameterizedTest
+    @DisplayName("ListIssuesErrors9: Attempt to list issues for invalid string project IDs")
+    @ValueSource(strings = {"invalid_project", "123abc", "!", "invalid/project/id", "project%20name%20with%20spaces", "project%2Fname%2Fwith%2Fslashes"})
+    void listIssuesWithInvalidStringProjectIdTest(String projectId) {
+        // Request the issue list with an invalid project ID
+        Response response = getIssuesRaw(projectId, Map.of());
+
+        assertMessage(response, 404, "404 Project Not Found");
+    }
+
 }
 
 
