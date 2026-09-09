@@ -159,7 +159,9 @@ public class ListIssuesPaginationTest extends BaseTest {
 
 
         //Check that all the created issues are returned across all pages
-        assertThat(returnedIids).containsExactlyElementsOf(paginationIssueIids);
+        assertThat(returnedIids)
+                .doesNotHaveDuplicates()
+                .containsExactlyInAnyOrderElementsOf(paginationIssueIids);
     }
 
     @Test

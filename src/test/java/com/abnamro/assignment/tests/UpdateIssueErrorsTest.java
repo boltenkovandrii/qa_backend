@@ -618,7 +618,7 @@ public class UpdateIssueErrorsTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("UpdateErrors26: Update issue with title exceeding maximum length")
+    @DisplayName("UpdateErrors30: Update issue with title exceeding maximum length")
     void updateIssueTitleTooLongTest() {
         // Prepare and send create issue request
         Issue created = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Test title")));
@@ -640,7 +640,7 @@ public class UpdateIssueErrorsTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("UpdateErrors1: Attempt to send update request with only updated_at field(requires admin rights)")
+    @DisplayName("UpdateErrors31: Attempt to send update request with only updated_at field(requires admin rights)")
     void updateIssueUpdatedAtOnlyTest() {
         // Prepare and send create request
         Issue created = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Update updated_at field to a specific timestamp")));

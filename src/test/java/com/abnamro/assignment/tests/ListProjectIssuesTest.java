@@ -29,7 +29,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
 
     @Test
-    @DisplayName("ListIssues25: List issues with a valid filter, but no matching issues")
+    @DisplayName("ListIssues1: List issues with a valid filter, but no matching issues")
     void listIssuesWithValidFilterButNoMatchingIssuesTest() {
         // Use a unique label that is unlikely to exist in the project
         String uniqueLabel = "nonexistent-label-" + UUID.randomUUID();
@@ -43,7 +43,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
 
     @Test
-    @DisplayName("ListIssues1: List issues assigned to a specific user")
+    @DisplayName("ListIssues2: List issues assigned to a specific user")
     void listIssuesByAssigneeIdTest() {
         // Create an assigned and an unassigned issue
         // we don't have another user in this setup, but it would be nice to add an issue assigned to another user too
@@ -67,7 +67,7 @@ public class ListProjectIssuesTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("ListIssues2: List issues assigned to a specific user by username")
+    @DisplayName("ListIssues3: List issues assigned to a specific user by username")
     void listIssuesByAssigneeUsernameTest() {
         // Create an assigned and an unassigned issue
         // we don't have another user in this setup, but it would be nice to add an issue assigned to another user too
@@ -90,7 +90,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
 
     @Test
-    @DisplayName("ListIssues3: List issues created by a specific user")
+    @DisplayName("ListIssues4: List issues created by a specific user")
     void listIssuesByAuthorIdTest() {
         // Create an issue using the current authenticated user
         // We don't have another user in this setup, and author is always filled. So test id not very m=meaningful. It would be nice to add an issue assigned to another user too
@@ -111,7 +111,7 @@ public class ListProjectIssuesTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("ListIssues4: List issues created by a specific user by username")
+    @DisplayName("ListIssues5: List issues created by a specific user by username")
     void listIssuesByAuthorUsernameTest() {
         // Create an issue using the current authenticated user
         // We don't have another user in this setup, and author is always filled. So test id not very m=meaningful. It would be nice to add an issue assigned to another user too
@@ -133,7 +133,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
 
     @Test
-    @DisplayName("ListIssues5: Filter by confidential parameter")
+    @DisplayName("ListIssues6: Filter by confidential parameter")
     void listIssuesByConfidentialParameterTest() {
         // Create a confidential and a non-confidential issue
         Issue confidentialIssue = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Confidential issue"))
@@ -157,7 +157,7 @@ public class ListProjectIssuesTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("ListIssues6: List issues created after specified date")
+    @DisplayName("ListIssues7: List issues created after specified date")
     void listIssuesCreatedAfterTest() {
         // Create an issue and record the time before creation
         Instant beforeCreation = Instant.now().minusSeconds(2);
@@ -173,7 +173,7 @@ public class ListProjectIssuesTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("ListIssues6: List issues created before specified date")
+    @DisplayName("ListIssues8: List issues created before specified date")
     void listIssuesCreatedBeforeTest() {
         // Create an issue and record the time after creation
         Issue created = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Created before test")));
@@ -190,10 +190,15 @@ public class ListProjectIssuesTest extends BaseTest {
 
 
     @ParameterizedTest
-    @DisplayName("ListIssues23: List issues with a due date - due_date filter options")
+    @DisplayName("ListIssues9: List issues with a due date - due_date filter options")
     // test just verifies that the request is accepted and returns no error and a list of issues (could be empty - no data generated specifically to match the request).
     @ValueSource(strings = {"any", "today", "tomorrow", "overdue", "week", "month", "next_month_and_previous_two_weeks"})
     void listIssuesByDueDateFilterTest(String dueDateFilter) {
+        // Create an issue with a due date in the future to ensure there is at least one issue in the project
+        LocalDate dueDate = LocalDate.now().plusDays(5);
+        createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Due date filter test"))
+                .setDueDate(dueDate.format(DATE_FORMATTER)));
+
         // List issues with the specified due date filter
         List<Issue> issues = getIssues(Map.of("due_date", dueDateFilter));
         assertThat(issues).as("Check that result is not null").isNotNull();
@@ -202,7 +207,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
     //for the sake of simplicity only testing due_date=month filter here. But checking other filters would be good test as well - good tests to add.
     @Test
-    @DisplayName("ListIssues8: List issues with a due date")
+    @DisplayName("ListIssue10: List issues with a due date")
     void listIssuesByDueDateTest() {
         LocalDate dueDate = LocalDate.now().plusDays(5);
 
@@ -227,14 +232,14 @@ public class ListProjectIssuesTest extends BaseTest {
 
 
     @Test
-    @DisplayName("ListIssues9: List issues by issue IIDs")
+    @DisplayName("ListIssues11: List issues by issue IIDs")
     void listIssuesByIidsTest() {
         // Create two issues
         Issue created1 = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("IID filter test 1")));
         Issue created2 = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("IID filter test 2")));
 
         // Request only the created issue IIDs
-        Map<String, Object> queryParams = Map.of("iids[]", List.of(created1.iid(), created2.iid()));
+        Map<String, Object> queryParams = Map.of("iids%5B%5D", List.of(created1.iid(), created2.iid()));
 
         // List issues by IIDs
         List<Issue> issues = getIssues(queryParams);
@@ -251,7 +256,7 @@ public class ListProjectIssuesTest extends BaseTest {
     //FINDING-1 - looks like current GitLab configuration supports only 3 issue types: issue, incident, task. Test case for test_case is commented out.
     @ParameterizedTest
     @ValueSource(strings = {"issue", "incident", "task"})
-    @DisplayName("ListIssues10: List issues by issue type")
+    @DisplayName("ListIssues12: List issues by issue type")
     void listIssuesByIssueTypeTest(String issueType) {
         //create one issue for each type and then filter by that type to verify that the filtering works correctly.
         Issue created1 = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Issue type filter test 1"))
@@ -276,8 +281,8 @@ public class ListProjectIssuesTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("ListIssues11: List all issues for a single label")
-    void createIssueMandatoryFieldsTest() {
+    @DisplayName("ListIssues13: List all issues for a single label")
+    void listIssuesBySingleLabelTest() {
         // Create issues with different sets of labels
         IssueCreateRequest createRequest1 = new IssueCreateRequest(generateUniqueIssueTitle("Test title"))
                 .setLabels("label1,label2");
@@ -301,7 +306,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
     // for the sake of simplicity only testing excluding a single label here. But checking other filters would be good test as well - good tests to add.
     @Test
-    @DisplayName("ListIssues12: Exclude issues with a specified label")
+    @DisplayName("ListIssues14: Exclude issues with a specified label")
     void listIssuesExcludingLabelTest() {
         // Create issues with different sets of labels.
         // Using unique labels to avoid conflicts with other tests and existing issues in the project.
@@ -330,10 +335,13 @@ public class ListProjectIssuesTest extends BaseTest {
 
 
     @ParameterizedTest
-    @DisplayName("ListIssues24: Ordering results - order_by options")
+    @DisplayName("ListIssues15: Ordering results - order_by options")
     // test just verifies that the request is accepted and returns no error and a list of issues (could be empty - no data generated specifically to match the request).
     @ValueSource(strings = {"created_at", "updated_at", "priority", "due_date", "relative_position", "label_priority", "milestone_due", "popularity", "weight"})
     void listIssuesByOrderByFilterTest(String orderBy) {
+        // Create an issue to ensure there is at least one issue in the project
+        createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Order by filter test")));
+
         // List issues with the specified order_by filter
         List<Issue> issues = getIssues(Map.of("order_by", orderBy));
         assertThat(issues).as("Check that result is not null").isNotNull();
@@ -342,7 +350,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
     // for the sake of simplicity only testing order_by=created_at filter here. But checking other filters would be good test as well - good tests to add.
     @Test
-    @DisplayName("ListIssues13: Order issues by creation date")
+    @DisplayName("ListIssues16: Order issues by creation date")
     void listIssuesOrderByCreatedAtTest() {
         // Create issues in a known order
         Issue first = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Order first")));
@@ -366,7 +374,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
     //Only testing scope=assigned_to_me as it is the only one that makes sense in this context. We don't have another user in this setup.
     @Test
-    @DisplayName("ListIssues14: Filter by scope parameter")
+    @DisplayName("ListIssues17: Filter by scope parameter")
     void listIssuesByScopeTest() {
         // Create an assigned and an unassigned issue
         Issue assignedIssue = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Assigned issue"))
@@ -388,7 +396,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
 
     @Test
-    @DisplayName("ListIssues15: Search issues by title")
+    @DisplayName("ListIssues18: Search issues by title")
     void listIssuesByTitleTest() {
         // Create an issue containing the search text in the title
         String searchText = "UniqueSearch" + UUID.randomUUID();
@@ -406,7 +414,7 @@ public class ListProjectIssuesTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("ListIssues16: Search issues by description")
+    @DisplayName("ListIssues19: Search issues by description")
     void listIssuesByDescriptionTest() {
         // Create an issue containing the search text in the description
         String searchText = "UniqueSearch" + UUID.randomUUID();
@@ -425,7 +433,7 @@ public class ListProjectIssuesTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("ListIssues17: Search issues using asc or desc sorting")
+    @DisplayName("ListIssues20: Search issues using asc or desc sorting")
     void listIssuesBySortingTest() {
         // Create issues in a known order
         Issue first = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Order first")));
@@ -457,7 +465,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"opened", "closed"})
-    @DisplayName("ListIssues18: List issues by state")
+    @DisplayName("ListIssues21: List issues by state")
     void listIssuesByStateTest(String state) {
         IssueCreateRequest request =  new IssueCreateRequest(generateUniqueIssueTitle("State filter test"));
         Issue created = createIssue(request);
@@ -476,7 +484,7 @@ public class ListProjectIssuesTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("ListIssues19: List issues updated after specified date")
+    @DisplayName("ListIssues22: List issues updated after specified date")
     void listIssuesUpdatedAfterTest() {
         // Create an issue and record the time before update
         Instant beforeUpdate = Instant.now().minusSeconds(2);
@@ -499,7 +507,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
 
     @Test
-    @DisplayName("ListIssues20: List issues updated before specified date")
+    @DisplayName("ListIssues23: List issues updated before specified date")
     void listIssuesUpdatedBeforeTest() {
         // Create an issue and record the time after update
         Issue created = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Updated before test")));
@@ -519,7 +527,7 @@ public class ListProjectIssuesTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("ListIssues21: Include detailed label information")
+    @DisplayName("ListIssues24: Include detailed label information")
     void listIssuesWithLabelsDetailsTest() {
         String label = "details-" + UUID.randomUUID();
 
@@ -572,7 +580,7 @@ public class ListProjectIssuesTest extends BaseTest {
 
 
     @Test
-    @DisplayName("ListIssues22: List issues with multiple filters combined")
+    @DisplayName("ListIssues25: List issues with multiple filters combined")
     void listIssuesWithMultipleFiltersTest() {
         // Create an issue with specific attributes
         String uniqueLabel = "multi-filter-" + UUID.randomUUID();

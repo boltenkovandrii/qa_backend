@@ -36,7 +36,7 @@ public class BaseTest {
         return TEST_ISSUE_PREFIX + " " + baseTitle + " " + timestamp + " " + getRandomLong();
     }
 
-    // To use this function we need unique string in title or description
+    // To use this function we need an unique string in title or description
     protected void checkIssueIsAbsent(long projectId, String searchQuery) {
         List<Issue> issues = getIssues(projectId, Map.of("search", searchQuery.replace(" ", "%20")));
         assertThat(issues).as("Check that issue with title '%s' is absent", searchQuery).isEmpty();

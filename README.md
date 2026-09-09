@@ -3,9 +3,9 @@
 ### Prerequisites
 - Java 17 (JDK)
 - Maven 3.6+
-- GitLab account with a application configured and personal access token (PAT) with `api` scope. It is supposed that use has admin rights in the test project.
+- GitLab account with an application configured and personal access token (PAT) with `api` scope. The user is expected to have admin rights in the test project.
 It is possible to use test project parameters provided in existing configuration, and required PAT token will be provided separately. 
-But it is not publicly available so it will not be possible to see created issues and troubleshot problems if needed. It is recommended to configure and use your own test project.
+But it is not publicly available so it will not be possible to see created issues and troubleshoot problems if needed. It is recommended to configure and use your own test project.
 
 ### Configuration
 - Set GITLAB_PROJECT_ID, GITLAB_PROJECT_PATH, GITLAB_USER_NAME and GITLAB_USER_ID `src/test/resources/config.properties`
@@ -42,7 +42,7 @@ as testing these fields properly would require creating and maintaining addition
 
 ### Sample run commands
 
-Run tests with default parameters and scope (all tests with `@Tag("UnitTest")` will be run):
+Run tests with default parameters and scope (By default, tests in the UnitTest scope are executed; tests marked WIP are excluded. Scope is defined by the `@Tag` annotation on the test class):
 ```powershell
 ./mvnw clean test; ./mvnw allure:report
 ```
@@ -66,7 +66,13 @@ Run tests with specific scope and given number of threads:
 ./mvnw clean test -Dscope=EmptyEnvironmentTests -Dthreads=1; ./mvnw allure:report
 ```
 
-It is also possible to run test vis GitHub Actions workflow. Scope and threads parameters can be passed to the workflow. See `.github/workflows/test.yml` for details.
+GitHub Actions supports manual execution with:
+- scope: UnitTest / EmptyEnvironmentTests / Reset / Cleanup
+- threads: number of parallel test threads
+
+Pushes and scheduled executions use:
+- scope=UnitTest
+- threads=2
 
 ### Viewing reports
 
