@@ -84,7 +84,6 @@ public class RestBase {
         return 200 <= statusCode && statusCode <= 299;
     }
 
-    //TODO: consider moving to AssertionHelpers
     public static void checkThatResponseIsSuccessful(Response response) {
         assertThat(isSuccess(response.getStatusCode()))
                 .as("Response code should be in range 200-299, but was " + response.getStatusCode())
