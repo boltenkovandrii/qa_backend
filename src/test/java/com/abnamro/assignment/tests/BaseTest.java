@@ -8,7 +8,9 @@ import org.apache.commons.configuration2.CompositeConfiguration;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static com.abnamro.assignment.base.IssuesAPI.getIssues;
@@ -20,9 +22,12 @@ public class BaseTest {
     protected static final long PROJECT_ID = config.getLong("GITLAB_PROJECT_ID");
     protected static final long USER_ID = config.getLong("GITLAB_USER_ID");
     protected static final String PROJECT_PATH = config.getString("GITLAB_PROJECT_PATH");
+    protected static final String GITLAB_USER_NAME = config.getString("GITLAB_USER_NAME");
 
     protected static final String NOT_FOUND_MESSAGE = "404 Not found";
     protected static final String ISSUE_NOT_FOUND_MESSAGE = "404 Issue Not Found";
+
+    protected static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
     private static  final Random random = new Random();
 
@@ -31,13 +36,11 @@ public class BaseTest {
         return TEST_ISSUE_PREFIX + " " + baseTitle + " " + timestamp + " " + getRandomLong();
     }
 
-
-    protected void checkIssueIsAbsent(long projectId, String title) {
-        List<Issue> issues = getIssues(projectId);
-        boolean issueExists = issues.stream().anyMatch(issue -> issue.title().equals(title));
-        assertThat(issueExists).as("Check that issue with title '%s' is absent", title).isFalse();
+    // To use this function we need unique string in title or description
+    protected void checkIssueIsAbsent(long projectId, String searchQuery) {
+        List<Issue> issues = getIssues(projectId, Map.of("search", searchQuery.replace(" ", "%20")));
+        assertThat(issues).as("Check that issue with title '%s' is absent", searchQuery).isEmpty();
     }
-
 
     protected Long getRandomLong() {
         return random.nextLong(1, Integer.MAX_VALUE); // Use Integer.MAX_VALUE to avoid overflow issues

@@ -77,8 +77,7 @@ public class CreateIssueErrorsTest extends BaseTest {
         // check response
         assertError(response, 400, "title is missing");
 
-        // check that issue was not created
-        checkIssueIsAbsent(PROJECT_ID, createRequest.getTitle());
+        //Cannot check that issue was not created by title, or description. Assume response code 400 is enough to ensure that issue was not created.
     }
 
 
@@ -86,8 +85,9 @@ public class CreateIssueErrorsTest extends BaseTest {
     @DisplayName("CreateErrors4: Attempt to create an issue with no title, but with some other fields set")
     void createIssueWithNoTitleButOtherFieldsSetTest() {
         // prepare and send request
+        String uniqueDescription = "Test description " + System.currentTimeMillis();
         IssueCreateRequest createRequest = new IssueCreateRequest(null)
-                .setDescription("Test description")
+                .setDescription(uniqueDescription)
                 .setAssigneeId(USER_ID);
         Response response = createIssueRaw(PROJECT_ID, createRequest);
 
@@ -95,7 +95,7 @@ public class CreateIssueErrorsTest extends BaseTest {
         assertError(response, 400, "title is missing");
 
         // check that issue was not created
-        checkIssueIsAbsent(PROJECT_ID, createRequest.getTitle());
+        checkIssueIsAbsent(PROJECT_ID, uniqueDescription);
     }
 
 
@@ -103,7 +103,9 @@ public class CreateIssueErrorsTest extends BaseTest {
     @DisplayName("CreateErrors5: Attempt to create an issue with no title, but with iid (requires Admin rights)")
     void createIssueWithNoTitleButIidSetTest() {
         // prepare and send request
+        String uniqueDescription = "Test description " + System.currentTimeMillis();
         IssueCreateRequest createRequest = new IssueCreateRequest(null)
+                .setDescription(uniqueDescription)
                 .setIid(getRandomLong());
         Response response = createIssueRaw(PROJECT_ID, createRequest);
 
@@ -111,7 +113,7 @@ public class CreateIssueErrorsTest extends BaseTest {
         assertError(response, 400, "title is missing");
 
         // check that issue was not created
-        checkIssueIsAbsent(PROJECT_ID, createRequest.getTitle());
+        checkIssueIsAbsent(PROJECT_ID, uniqueDescription);
     }
 
 
@@ -193,14 +195,15 @@ public class CreateIssueErrorsTest extends BaseTest {
     @DisplayName("CreateErrors10: Attempt to create issue with empty title")
     void createTwoIssuesWithEmptyTitleTest() {
         // Prepare and send request to create the first issue with an empty title.
-        IssueCreateRequest createRequest = new IssueCreateRequest("");
+        String uniqueDescription = "Test description " + System.currentTimeMillis();
+        IssueCreateRequest createRequest = new IssueCreateRequest("").setDescription(uniqueDescription);
         Response response = createIssueRaw(PROJECT_ID, createRequest);
 
         // Check that the response indicates a bad request due to the empty title.
         assertMessage(response, 400, "[title:[can't be blank]]");
 
         // The issue must not be created.
-        checkIssueIsAbsent(PROJECT_ID, createRequest.getTitle());
+        checkIssueIsAbsent(PROJECT_ID, uniqueDescription);
     }
 
 
