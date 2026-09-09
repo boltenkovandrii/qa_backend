@@ -122,6 +122,8 @@ public class UpdateIssueTest extends BaseTest {
         deleteIssue(created.iid());
     }
 
+
+    //Only one user is configured for this assignment, but in the future, would be nice to add a test for assigning multiple users to an issue, and then unassigning them.
     @Test
     @DisplayName("Update5: Update issue assignee")
     void updateIssueAssigneeTest() {
@@ -163,7 +165,6 @@ public class UpdateIssueTest extends BaseTest {
         deleteIssue(created.iid());
     }
 
-    //TODO: Only one user is configured for this assignment, but in future, would be nice to add a test for assigning multiple users to an issue, and then unassigning them.
 
     @Test
     @DisplayName("Update7: Make issue confidential")
@@ -399,7 +400,7 @@ public class UpdateIssueTest extends BaseTest {
         deleteIssue(created.iid());
     }
 
-    //TODO: no tests for updating milestone, or milestone_id, as this assignment does not include any milestone setup. In future, it would be nice to add tests for updating milestone, and milestone_id.
+    //no tests for updating milestone, or milestone_id, as this assignment does not include any milestone setup. In future, it would be nice to add tests for updating milestone, and milestone_id.
 
     @Test
     @DisplayName("Update17: Remove selected issue labels")

@@ -47,7 +47,7 @@ public class TestConfig {
             Configurations configs = new Configurations();
             config.addConfiguration(configs.properties("src/test/resources/gitlab.properties"));
         } catch (ConfigurationException e) {
-            LOGGER.warn("Failed to load gitlab.properties file. Not a problem for CI setup - environment variables should be used in this case", e);
+            LOGGER.warn("Failed to load gitlab.properties file. Not a problem for CI setup - environment variables should be used in this case. Make sure that GITLAB_ACCESS_TOKEN variable is configured for the project in GitHub", e);
         }
     }
 
