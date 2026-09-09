@@ -77,11 +77,11 @@ public class ListProjectIssuesTest extends BaseTest {
                 new IssueCreateRequest(generateUniqueIssueTitle("Unassigned issue")));
 
         // List issues assigned to the target username
-        List<Issue> issues = getIssues(Map.of("assignee_username", GITLAB_USER_NAME));
+        List<Issue> issues = getIssues(Map.of("assignee_username", USER_NAME));
 
         // Verify that the returned issues are assigned to the specified username
         assertThat(issues).as("Check that result is not empty").isNotEmpty();
-        assertThat(issues).allSatisfy(issue -> assertThat(issue.assignee().username()).isEqualTo(GITLAB_USER_NAME));
+        assertThat(issues).allSatisfy(issue -> assertThat(issue.assignee().username()).isEqualTo(USER_NAME));
 
         // Cleanup
         deleteIssue(assignedIssue.iid());
@@ -119,13 +119,13 @@ public class ListProjectIssuesTest extends BaseTest {
 
         // List issues created by the specified username
         List<Issue> issues = getIssues(Map.of(
-                "author_username", GITLAB_USER_NAME,
+                "author_username", USER_NAME,
                 "scope", "all"
         ));
 
         // Verify that the returned issues are created by the specified username
         assertThat(issues).as("Check that result is not empty").isNotEmpty();
-        assertThat(issues).allSatisfy(issue ->  assertThat(issue.author().username()).isEqualTo(GITLAB_USER_NAME));
+        assertThat(issues).allSatisfy(issue ->  assertThat(issue.author().username()).isEqualTo(USER_NAME));
 
         // Cleanup
         deleteIssue(created.iid());

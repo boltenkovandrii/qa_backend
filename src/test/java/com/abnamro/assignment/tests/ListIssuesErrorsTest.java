@@ -55,7 +55,7 @@ public class ListIssuesErrorsTest extends BaseTest {
                 PROJECT_ID,
                 Map.of(
                         "author_id", USER_ID,
-                        "author_username", GITLAB_USER_NAME
+                        "author_username", USER_NAME
                 ));
 
         assertError(response, 400, "author_id, author_username are mutually exclusive");
@@ -69,7 +69,7 @@ public class ListIssuesErrorsTest extends BaseTest {
                 PROJECT_ID,
                 Map.of(
                         "assignee_id", USER_ID,
-                        "assignee_username", GITLAB_USER_NAME
+                        "assignee_username", USER_NAME
                 ));
 
         assertError(response, 400, "assignee_id, assignee_username are mutually exclusive");

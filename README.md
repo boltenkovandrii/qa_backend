@@ -8,7 +8,7 @@ It is possible to use test project parameters provided in existing configuration
 But it is not publicly available so it will not be possible to see created issues and troubleshoot problems if needed. It is recommended to configure and use your own test project.
 
 ### Configuration
-- Set GITLAB_PROJECT_ID, GITLAB_PROJECT_PATH, GITLAB_USER_NAME and GITLAB_USER_ID `src/test/resources/config.properties`
+- Set PROJECT_ID, PROJECT_PATH, USER_NAME and USER_ID `src/test/resources/config.properties`
 - Create file `src/test/resources/gitlab.properties` based on provided sample and store your GitLab personal access token (PAT) in it. 
 <span style="color:#AA2222">**The file is ignored by git and should never be committed to the repository.**</span>
 - For CI runs, create environment variable `GITLAB_ACCESS_TOKEN` with personal access token (Settings-> Secrets and variables-> Actions-> New repository secret).
@@ -54,7 +54,7 @@ Run tests for specific scope (specific Tag):
 
 Run specific test by method name (useful for debugging):
 ```powershell
- ./mvnw clean test -Dtest=#listIssuesWithInvalidStringProjectIdTest ; ./mvnw allure:report
+ ./mvnw clean test -Dtest=*#listIssuesWithInvalidStringProjectIdTest ; ./mvnw allure:report
 ```
 
 Run specific tests by class name (useful for debugging):

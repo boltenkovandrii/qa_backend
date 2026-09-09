@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 // This class provides a base for making REST API calls with retry logic for GET requests.
-//Would be nice to add handling of error 429 (Too Many Requests) with exponential backoff, but for now, we will just retry a fixed number of times with a fixed delay only for GET.
+// Would be nice to add handling of error 429 (Too Many Requests) with exponential backoff, but for now, we will just retry a fixed number of times with a fixed delay only for GET.
 public class RestBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RestBase.class);

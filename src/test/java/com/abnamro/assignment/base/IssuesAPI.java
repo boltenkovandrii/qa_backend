@@ -20,7 +20,7 @@ import static com.abnamro.assignment.base.RestBase.checkThatResponseIsSuccessful
 public class IssuesAPI {
 
     private static final CompositeConfiguration config = TestConfig.getConfiguration();
-    private static final long PROJECT_ID = config.getLong("GITLAB_PROJECT_ID");
+    private static final long PROJECT_ID = config.getLong("PROJECT_ID");
 
     private static final String PROJECT_ISSUES_URL = "/api/v4/projects/";
 
