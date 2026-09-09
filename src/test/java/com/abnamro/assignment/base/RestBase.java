@@ -12,12 +12,16 @@ import org.slf4j.LoggerFactory;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.LogConfig.logConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
+
+// This class provides a base for making REST API calls with retry logic for GET requests.
+// Would be nice to add handling of error 429 (Too Many Requests) with exponential backoff, but for now, we will just retry a fixed number of times with a fixed delay only for GET.
 public class RestBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RestBase.class);
@@ -35,14 +39,18 @@ public class RestBase {
     }
 
     private RequestSpecification authenticatedRequest() {
-        return given().config(rConfig).spec(reqSpec).header("PRIVATE-TOKEN", config.getString("GITLAB_ACCESS_TOKEN"));
+        return given().config(rConfig).spec(reqSpec).header("PRIVATE-TOKEN", config.getString("GITLAB_ACCESS_TOKEN")).urlEncodingEnabled(false);
     }
 
     public Response getInternal(String URI) {
+        return getInternal(URI, Map.of());
+    }
+
+    public Response getInternal(String URI, Map<String, ?> queryParams) {
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
             try {
                 LOGGER.info("Sending GET request on {} (attempt {}/{})", URI, attempt, maxAttempts);
-                Response response = authenticatedRequest().when().get(URI);
+                Response response = authenticatedRequest().queryParams(queryParams).when().get(URI);
 
                 if (!needRetry(response.getStatusCode()) || attempt == maxAttempts) {
                     return response;
@@ -79,7 +87,6 @@ public class RestBase {
         return 200 <= statusCode && statusCode <= 299;
     }
 
-    //TODO: consider moving to AssertionHelpers
     public static void checkThatResponseIsSuccessful(Response response) {
         assertThat(isSuccess(response.getStatusCode()))
                 .as("Response code should be in range 200-299, but was " + response.getStatusCode())

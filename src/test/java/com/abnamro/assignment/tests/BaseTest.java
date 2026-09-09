@@ -6,8 +6,13 @@ import com.abnamro.assignment.model.IssueCreateRequest;
 import io.restassured.response.Response;
 import org.apache.commons.configuration2.CompositeConfiguration;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static com.abnamro.assignment.base.IssuesAPI.getIssues;
@@ -16,11 +21,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BaseTest {
     private static final CompositeConfiguration config = TestConfig.getConfiguration();
     protected static final String TEST_ISSUE_PREFIX = config.getString("TEST_ISSUE_PREFIX");
-    protected static final long PROJECT_ID = config.getLong("GITLAB_PROJECT_ID");
-    protected static final long USER_ID = config.getLong("GITLAB_USER_ID");
+    protected static final long PROJECT_ID = config.getLong("PROJECT_ID");
+    protected static final long USER_ID = config.getLong("USER_ID");
+    protected static final String PROJECT_PATH = config.getString("PROJECT_PATH");
+    protected static final String USER_NAME = config.getString("USER_NAME");
 
     protected static final String NOT_FOUND_MESSAGE = "404 Not found";
     protected static final String ISSUE_NOT_FOUND_MESSAGE = "404 Issue Not Found";
+
+    protected static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
     private static  final Random random = new Random();
 
@@ -29,16 +38,37 @@ public class BaseTest {
         return TEST_ISSUE_PREFIX + " " + baseTitle + " " + timestamp + " " + getRandomLong();
     }
 
+    /*
+    // To use this function we need a unique string in title or description
+    protected void checkIssueIsAbsent(long projectId, String searchQuery) {
+        List<Issue> issues = getIssues(projectId, Map.of("search", searchQuery.replace(" ", "%20")));
+        assertThat(issues).as("Check that issue with title '%s' is absent", searchQuery).isEmpty();
+    }
 
-    protected void checkIssueIsAbsent(long projectId, String title) {
-        List<Issue> issues = getIssues(projectId);
-        boolean issueExists = issues.stream().anyMatch(issue -> issue.title().equals(title));
-        assertThat(issueExists).as("Check that issue with title '%s' is absent", title).isFalse();
+     */
+
+    // To use this function we need a unique string in title or description
+    protected void checkIssueIsAbsent(long projectId, String searchQuery) {
+        String encodedSearchQuery = URLEncoder.encode(searchQuery, StandardCharsets.UTF_8);
+        List<Issue> issues = getIssues(projectId, Map.of("search", encodedSearchQuery));
+        assertThat(issues).as("Check that issue with title '%s' is absent", searchQuery).isEmpty();
     }
 
 
     protected Long getRandomLong() {
         return random.nextLong(1, Integer.MAX_VALUE); // Use Integer.MAX_VALUE to avoid overflow issues
+    }
+
+    protected void assertIssueHasDefaultValues(Issue issue, String title) {
+        assertThat(issue).as("Issue should not be null").isNotNull();
+        assertThat(issue.title()).isEqualTo(title);
+        assertThat(issue.author()).isNotNull();
+        assertThat(issue.author().id()).isEqualTo(USER_ID);
+        assertThat(issue.confidential()).isEqualTo(false);
+        assertThat(issue.createdAt()).isNotNull();
+        assertThat(issue.issueType()).isEqualTo("issue");
+        assertThat(issue.labels()).isEmpty();
+        assertThat(issue.description()).isNull();
     }
 
     protected void assertIssueMatchesRequest(Issue issue, IssueCreateRequest request) {
@@ -48,7 +78,7 @@ public class BaseTest {
         assertThat(issue.assignee().id()).isEqualTo(request.getAssigneeId());
         assertThat(issue.confidential()).isEqualTo(request.getConfidential());
         if (request.getCreatedAt() != null) {
-            assertThat(issue.createdAt()).isEqualTo(java.time.Instant.parse(request.getCreatedAt()));
+            assertThat(issue.createdAt()).isEqualTo(Instant.parse(request.getCreatedAt()));
         }else {
             assertThat(issue.createdAt()).isNull();
         }

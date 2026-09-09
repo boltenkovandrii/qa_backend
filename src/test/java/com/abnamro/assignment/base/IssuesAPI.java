@@ -10,6 +10,7 @@ import io.restassured.response.Response;
 import org.apache.commons.configuration2.CompositeConfiguration;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.abnamro.assignment.base.RestBase.checkThatResponseIsSuccessful;
 
@@ -19,7 +20,7 @@ import static com.abnamro.assignment.base.RestBase.checkThatResponseIsSuccessful
 public class IssuesAPI {
 
     private static final CompositeConfiguration config = TestConfig.getConfiguration();
-    private static final long PROJECT_ID = config.getLong("GITLAB_PROJECT_ID");
+    private static final long PROJECT_ID = config.getLong("PROJECT_ID");
 
     private static final String PROJECT_ISSUES_URL = "/api/v4/projects/";
 
@@ -34,21 +35,29 @@ public class IssuesAPI {
     ////////////// List all project issues ////////////////
 
     public static List<Issue> getIssues() {
-        return getIssues(PROJECT_ID);
+        return getIssues(PROJECT_ID, Map.of());
     }
 
     public static List<Issue> getIssues(long projectId) {
-        Response response = getIssuesRaw(projectId);
+        return getIssues(projectId, Map.of());
+    }
+
+    public static List<Issue> getIssues(Map<String, ?> queryParams) {
+        return getIssues(PROJECT_ID, queryParams);
+    }
+
+    public static List<Issue> getIssues(long projectId, Map<String, ?> queryParams) {
+        Response response = getIssuesRaw(projectId, queryParams);
         checkThatResponseIsSuccessful(response);
         return response.jsonPath().getList("", Issue.class);
     }
 
-    public static Response getIssuesRaw(long projectId) {
-        return restBase.getInternal(projectIssuesUrl(projectId));
+    public static Response getIssuesRaw(long projectId, Map<String, ?> queryParams) {
+        return restBase.getInternal(projectIssuesUrl(projectId), queryParams);
     }
 
-    public static Response getIssuesRaw(String projectId) {
-        return restBase.getInternal(projectIssuesUrl(projectId));
+    public static Response getIssuesRaw(String projectId, Map<String, ?> queryParams) {
+        return restBase.getInternal(projectIssuesUrl(projectId), queryParams);
     }
 
 
@@ -143,7 +152,7 @@ public class IssuesAPI {
     }
 
     private static String projectIssuesUrl(String projectId) {
-        return PROJECT_ISSUES_URL + projectId + "/issues";
+        return PROJECT_ISSUES_URL + projectId.replace("/", "%2F") + "/issues";
     }
 
     public static RestBase getRestBase() {
