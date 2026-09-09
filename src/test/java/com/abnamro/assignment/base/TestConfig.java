@@ -20,34 +20,40 @@ public class TestConfig {
         return Holder.INSTANCE.config;
     }
 
-    private TestConfig(){
+    private TestConfig() {
         LOGGER.info("Initializing TestConfig and loading configuration parameters");
-        config =  new CompositeConfiguration();
+        config = new CompositeConfiguration();
 
-        //general parameters for test execution can be added here, like number of threads, retry attempts, etc.
-        try {
-            Configurations configs = new Configurations();
-            config.addConfiguration(configs.properties("src/test/resources/config.properties"));
-        } catch (ConfigurationException e) {
-            throw new IllegalStateException("Failed to load test configuration", e);
-        }
-
-        // Load gitlab.properties file if it exists, otherwise log a warning
-        loadGitlabConfiguration();
-
-        // Add system and environment configurations after loading the properties file
+        // System properties and environment variables have highest priority.
         config.addConfiguration(new SystemConfiguration());
         config.addConfiguration(new EnvironmentConfiguration());
+
+        // General test configuration.
+        try {
+            Configurations configs = new Configurations();
+            config.addConfiguration(
+                    configs.properties("src/test/resources/config.properties"));
+        } catch (ConfigurationException e) {
+            throw new IllegalStateException(
+                    "Failed to load test configuration", e);
+        }
+
+        // Load local GitLab configuration if available.
+        loadGitlabConfiguration();
     }
 
 
-    private void loadGitlabConfiguration(){
-        // Load gitlab.properties file if it exists, otherwise log a warning
+    private void loadGitlabConfiguration() {
         try {
             Configurations configs = new Configurations();
-            config.addConfiguration(configs.properties("src/test/resources/gitlab.properties"));
+            config.addConfiguration(
+                    configs.properties("src/test/resources/gitlab.properties"));
         } catch (ConfigurationException e) {
-            LOGGER.warn("Failed to load gitlab.properties file. Not a problem for CI setup - environment variables should be used in this case. Make sure that GITLAB_ACCESS_TOKEN variable is configured for the project in GitHub", e);
+            LOGGER.warn(
+                    "Failed to load gitlab.properties. This is expected in CI, "
+                            + "where GitLab configuration is provided through "
+                            + "environment variables.",
+                    e);
         }
     }
 

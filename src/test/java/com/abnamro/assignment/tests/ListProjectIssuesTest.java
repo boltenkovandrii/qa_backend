@@ -196,12 +196,15 @@ public class ListProjectIssuesTest extends BaseTest {
     void listIssuesByDueDateFilterTest(String dueDateFilter) {
         // Create an issue with a due date in the future to ensure there is at least one issue in the project
         LocalDate dueDate = LocalDate.now().plusDays(5);
-        createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Due date filter test"))
+        Issue created = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Due date filter test"))
                 .setDueDate(dueDate.format(DATE_FORMATTER)));
 
         // List issues with the specified due date filter
         List<Issue> issues = getIssues(Map.of("due_date", dueDateFilter));
         assertThat(issues).as("Check that result is not null").isNotNull();
+
+        // Cleanup
+        deleteIssue(created.iid());
     }
 
 
@@ -340,11 +343,14 @@ public class ListProjectIssuesTest extends BaseTest {
     @ValueSource(strings = {"created_at", "updated_at", "priority", "due_date", "relative_position", "label_priority", "milestone_due", "popularity", "weight"})
     void listIssuesByOrderByFilterTest(String orderBy) {
         // Create an issue to ensure there is at least one issue in the project
-        createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Order by filter test")));
+        Issue created = createIssue(new IssueCreateRequest(generateUniqueIssueTitle("Order by filter test")));
 
         // List issues with the specified order_by filter
         List<Issue> issues = getIssues(Map.of("order_by", orderBy));
         assertThat(issues).as("Check that result is not null").isNotNull();
+
+        //cleanup -
+        deleteIssue(created.iid());
     }
 
 
